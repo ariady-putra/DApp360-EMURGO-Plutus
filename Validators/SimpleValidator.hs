@@ -50,7 +50,7 @@ validator = mkValidatorScript $$(PlutusTx.compile [|| alwaysSucceeds ||]) -- Val
 valHash :: Ledger.ValidatorHash
 valHash = Scripts.validatorHash validator                                 -- The hash of the validator
 
-scrAddress :: Ledger.scrAddress
+scrAddress :: Ledger.Address
 scrAddress = scriptAddress validator
 
 --OFF-CHAIN
