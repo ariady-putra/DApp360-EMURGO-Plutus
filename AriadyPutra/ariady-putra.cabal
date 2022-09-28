@@ -92,14 +92,14 @@ library
                         TypeOperators
     ghc-options:    -fno-ignore-interface-pragmas
                     -fno-omit-interface-pragmas
+                    -fno-warn-redundant-constraints
+                    -fno-warn-unused-imports
+                    -fno-warn-unused-matches
                     -fobject-code
                     -Wall
                     -Wcompat
                     -Wincomplete-record-updates
                     -Wincomplete-uni-patterns
                     -Wno-missing-import-lists
-                    -Wredundant-constraints
-                    -Wunused-imports
-                    -Wunused-matches
 
 

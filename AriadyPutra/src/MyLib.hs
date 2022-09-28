@@ -1,7 +1,3 @@
-{-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
-{-# OPTIONS_GHC -fno-warn-unused-imports        #-}
-{-# OPTIONS_GHC -fno-warn-unused-matches        #-}
-
 module MyLib where
 
 import Control.Monad (void)
