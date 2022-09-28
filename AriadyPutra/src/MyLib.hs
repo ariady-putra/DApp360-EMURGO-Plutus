@@ -7,7 +7,9 @@ import Data.Map              qualified as M
 import Data.Maybe            (catMaybes)
 
 import Ledger               qualified
-import Ledger               (from, before)
+import Ledger               (from, to)
+import Ledger               (before, after)
+import Ledger               (contains)
 import Ledger               (txInfoValidRange)
 import Ledger.Constraints   (mustIncludeDatum)
 import Ledger.Constraints   (mustPayToTheScript)
@@ -23,10 +25,9 @@ import Ledger.Value         (Value)
 
 import Playground.Contract
 import Plutus.Contract
-import PlutusTx                   qualified
-import PlutusTx.Builtins.Internal (BuiltinInteger)
+import PlutusTx qualified
 import PlutusTx.Prelude
-import Prelude                    qualified as Haskell
+import Prelude  qualified as Haskell
 
 ------------------------------------------------------------ DATATYPE DECLARATIONS ------------------------------------------------------------
 
@@ -34,7 +35,7 @@ data GameData
     = GameData
     { _gamePolicyID :: BuiltinByteString
     , _gameTitle    :: BuiltinByteString
-    , _gamePrice    :: BuiltinInteger -- PlutusTx.Builtins.Internal
+    , _gamePrice    :: Value
     }
     deriving Show
 PlutusTx.unstableMakeIsData ''GameData
