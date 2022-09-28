@@ -3,7 +3,7 @@
     "tasks":
     [
         {
-            "label": "MathBounty",
+            "label": "Cabal REPL",
             "type": "shell",
             "command": "cabal repl",
             "runOptions":
