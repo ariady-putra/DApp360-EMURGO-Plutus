@@ -38,7 +38,9 @@ data GameData
     , _gamePrice    :: Value
     }
     deriving Show
-PlutusTx.unstableMakeIsData ''GameData
+PlutusTx.makeIsDataIndexed ''GameData
+    [ ('GameData, 0)
+    ]
 PlutusTx.makeLift ''GameData
 
 data PublisherAction
@@ -54,7 +56,11 @@ data PublisherAction
     , _willBurnGame :: GameData
     }
     deriving Show
-PlutusTx.unstableMakeIsData ''PublisherAction
+PlutusTx.makeIsDataIndexed ''PublisherAction
+    [ ('MintGame, 0)
+    , ('SetPrice, 1)
+    , ('BurnGame, 2)
+    ] -- https://github.com/Plutonomicon/plutonomicon/blob/main/builtin-data.md#what-is-constr
 PlutusTx.makeLift ''PublisherAction
 
 data UserMarket
@@ -65,7 +71,10 @@ data UserMarket
     { _gameSecondary :: GameData
     }
     deriving Show
-PlutusTx.unstableMakeIsData ''UserMarket
+PlutusTx.makeIsDataIndexed ''UserMarket
+    [ ('PrimaryMarket  , 0)
+    , ('SecondaryMarket, 1)
+    ]
 PlutusTx.makeLift ''UserMarket
 
 -- | Datum parameters
@@ -82,7 +91,11 @@ data MarketDatum
     , _userMarket :: UserMarket
     }
     deriving Show
-PlutusTx.unstableMakeIsData ''MarketDatum
+PlutusTx.makeIsDataIndexed ''MarketDatum
+    [ ('PlatformDatum , 0)
+    , ('PublisherDatum, 1)
+    , ('UserDatum     , 2)
+    ]
 
 -- | Redeemer parameters
 data MarketRedeemer
@@ -98,7 +111,11 @@ data MarketRedeemer
     , _redeemerUserMarket :: UserMarket
     }
     deriving Show
-PlutusTx.unstableMakeIsData ''MarketRedeemer
+PlutusTx.makeIsDataIndexed ''MarketRedeemer
+    [ ('PlatformRedeemer , 0)
+    , ('PublisherRedeemer, 1)
+    , ('UserRedeemer     , 2)
+    ]
 
 ------------------------------------------------------------ ON-CHAIN ------------------------------------------------------------
 
