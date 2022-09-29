@@ -127,3 +127,25 @@ solution guess = do
                                     ledgerTx <- submitTxConstraintsWith @Void lookups tx
                                     void $ awaitTxConfirmed $ getCardanoTxId ledgerTx
                                     logInfo @String $ printf "Proposed solution is: %d" (guess)     
+
+
+mkSchemaDefinitions ''MathBountySchema
+mkKnownCurrencies []
+
+-- t0 of the Playground = 1596059091000, and every second is 1000
+
+test :: IO ()
+test = runEmulatorTraceIO $ do
+    h1 <- activateContractWallet (knownWallet 1) endpoints
+    h2 <- activateContractWallet (knownWallet 2) endpoints
+    h3 <- activateContractWallet (knownWallet 3) endpoints
+    callEndpoint @"bounty" h1 $ BP
+                    { bMathBounty = 100
+                  , bAmount     = 51000000
+                  , bDeadline   = 1596059101000 
+                    }
+    void $ Emulator.waitNSlots 5
+    callEndpoint @"solution" h2 $ 5 
+    void $ Emulator.waitNSlots 2
+    callEndpoint @"solution" h3 $ 10
+    void $ Emulator.waitNSlots 11  
