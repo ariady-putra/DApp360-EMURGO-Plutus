@@ -10,6 +10,7 @@ import Ledger               qualified
 import Ledger               (from, to)
 import Ledger               (before, after)
 import Ledger               (contains)
+import Ledger               (getCardanoTxId)
 import Ledger               (txInfoValidRange)
 import Ledger.Constraints   (mustIncludeDatum)
 import Ledger.Constraints   (mustPayToTheScript)
@@ -21,21 +22,22 @@ import Ledger.Constraints   (unspentOutputs)
 import Ledger.Contexts      (ScriptContext (..))
 import Ledger.Tx            (ChainIndexTxOut (..))
 import Ledger.Typed.Scripts qualified as Scripts
-import Ledger.Value         (Value)
+import Ledger.Value         (CurrencySymbol, Value)
+import Ledger.Value         qualified
+import Ledger.Ada           qualified as Ada
 
 import Playground.Contract
 import Plutus.Contract
 import PlutusTx qualified
 import PlutusTx.Prelude
 import Prelude  qualified as Haskell
-
 ------------------------------------------------------------ DATATYPE DECLARATIONS ------------------------------------------------------------
 
 data GameData
     = GameData
-    { _gamePolicyID :: BuiltinByteString
-    , _gameTitle    :: BuiltinByteString
-    , _gamePrice    :: Value
+    { _franchise :: CurrencySymbol
+    , _gameTitle :: TokenName
+    , _gamePrice :: Value
     }
     deriving Show
 PlutusTx.makeIsDataIndexed ''GameData
@@ -116,7 +118,6 @@ PlutusTx.makeIsDataIndexed ''MarketRedeemer
     , ('PublisherRedeemer, 1)
     , ('UserRedeemer     , 2)
     ]
-
 ------------------------------------------------------------ ON-CHAIN ------------------------------------------------------------
 
 {-# INLINABLE validate #-}
@@ -124,7 +125,7 @@ validate :: MarketDatum -> MarketRedeemer -> ScriptContext -> Bool
 
 -- Primary Market
 -- TODO: Minting on-demand instead if possible
--- validate (PublisherDatum publisher (MintGame game)) undefined                 ctx = False -- Publisher mints game
+validate (PublisherDatum publisher (MintGame game)) _                         ctx = True  -- Publisher mints game
 validate undefined (PublisherRedeemer publisher (SetPrice old new))           ctx = False -- Publisher changes game price
 validate undefined (PublisherRedeemer publisher (BurnGame existing willburn)) ctx = False -- Publisher burns game
 
@@ -140,28 +141,82 @@ validate undefined (UserRedeemer user (SecondaryMarket game))                 ct
 -- any other scenarios are rejected
 validate _ _ _ = False
 
+data Market
+instance Scripts.ValidatorTypes Market where
+    type instance DatumType     Market = MarketDatum
+    type instance RedeemerType  Market = MarketRedeemer
+
+marketValidator :: Scripts.TypedValidator Market
+marketValidator = Scripts.mkTypedValidator @Market
+    $$(PlutusTx.compile [|| validate ||])
+    $$(PlutusTx.compile [||   wrap   ||])
+    where wrap = Scripts.wrapValidator
+                @MarketDatum
+                @MarketRedeemer
+------------------------------------------------------------ LOGGING HELPERS ------------------------------------------------------------
+
+-- | Log 2 Haskell.String as logDebug | logInfo | logWarn | logError
+logAs :: (AsContractError x) =>
+    (Haskell.String -> MarketContract x ()) -> Haskell.String -> Haskell.String ->
+    MarketContract x ()
+logAs doLog str = doLog . (str++)
+
+-- | Log Haskell.String as logDebug | logInfo | logWarn | logError
+logStrAs :: (AsContractError x) =>
+    (Haskell.String -> MarketContract x ()) -> Haskell.String ->
+    MarketContract x ()
+logStrAs doLog = logAs doLog ""
+
+-- | Log Haskell.String and Haskell.show s as logDebug | logInfo | logWarn | logError
+logStrShowAs :: (Show s, AsContractError x) =>
+    (Haskell.String -> MarketContract x ()) -> Haskell.String -> s ->
+    MarketContract x ()
+logStrShowAs doLog str = (logAs doLog str) . Haskell.show
+
+-- | Log Haskell.show s as logDebug | logInfo | logWarn | logError
+logShowAs :: (Show s, AsContractError x) =>
+    (Haskell.String -> MarketContract x ()) -> s ->
+    MarketContract x ()
+logShowAs doLog = logStrShowAs doLog ""
 ------------------------------------------------------------ OFF-CHAIN ------------------------------------------------------------
 
 type MarketContract = Contract () MarketSchema
 type MarketPromise  = Promise  () MarketSchema
 
-data PubMintGame
-    = PubMintGame
-    { _pubMintGamePolicyID :: Haskell.String
-    , _pubMintGameTitle    :: Haskell.String
-    , _pubMintGamePrice    :: Value
+data PubMintGames
+    = PubMintGames
+    { _pubMintFranchise :: CurrencySymbol
+    , _pubMintGameTitle :: TokenName
+    , _pubMintGamePrice :: Value
+    , _pubMintGameStock :: Integer
     }
-    deriving (Generic, FromJSON, ToJSON, ToSchema, ToArgument)
+    deriving (Generic, FromJSON, ToJSON, ToSchema)
 
-pubMintGame :: (AsContractError x) => MarketPromise x ()
-pubMintGame = endpoint @"Publisher: 1. Mint Game" $ \ params -> do
-    Haskell.undefined -- TODO: Mint games and put them as stock to the contract
+min_req_utxo = 1_500_000 -- lovelace
+
+pubMintGames :: (AsContractError x) => MarketPromise x ()
+pubMintGames = endpoint @"Publisher: 1. Mint Games" $ \ params -> do
+    pkh <- ownPaymentPubKeyHash
+    let franchise = _pubMintFranchise params
+        gameTitle = _pubMintGameTitle params
+        gamePrice = _pubMintGamePrice params
+        gameStock = _pubMintGameStock params
+        gameDatum = GameData franchise gameTitle gamePrice
+        action    = MintGame gameDatum
+        you       = PublisherDatum pkh action
+        nft       = Ledger.Value.singleton franchise gameTitle gameStock <> -- TODO: Should be NFT
+                    Ada.lovelaceValueOf min_req_utxo
+        txn       = you `mustPayToTheScript` nft
+    cardanoTx <- submitTxConstraints marketValidator txn
+    let txHash = getCardanoTxId cardanoTx
+    void $ awaitTxConfirmed txHash
+    logStrShowAs logInfo "Minted games txHash:" txHash
 
 endpoints :: (AsContractError x) => MarketContract x ()
 endpoints = selectList
-            [ pubMintGame
+            [ pubMintGames
             ]
-type MarketSchema = Endpoint "Publisher: 1. Mint Game" PubMintGame
+type MarketSchema = Endpoint "Publisher: 1. Mint Games" PubMintGames
 mkSchemaDefinitions ''MarketSchema
 
 $(mkKnownCurrencies [])
