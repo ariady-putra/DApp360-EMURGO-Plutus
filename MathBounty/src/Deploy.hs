@@ -38,7 +38,10 @@ writeUnit :: IO ()
 writeUnit = writeJSON "testnet/unit.json" ()
 
 writeDatum :: IO ()
-writeDatum = writeJSON "testnet/datum.json" (MBD 100 1664586000000)  
+writeDatum = writeJSON "testnet/datum.json" (MBD 100 1664586000000)
+
+writeRedeemer :: IO ()
+writeREdeemer = writeJSON "testnet/goodRedeemer.json" 10
 
 writeBountyValidator :: IO (Either (FileError ()) ())
-writeBountyValidator = writeValidator "testnet/mathBounty.plutus" $ validator 
+writeBountyValidator = writeValidator "testnet/mathBounty.plutus" $ validator
