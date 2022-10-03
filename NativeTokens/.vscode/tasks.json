@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks":
+    [
+        {
+            "label": "Cabal REPL",
+            "type": "shell",
+            "command": "cabal repl",
+            "runOptions":
+            {
+                "runOn": "folderOpen"
+            }
+        }
+    ]
+}
