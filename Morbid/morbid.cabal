@@ -76,6 +76,7 @@ library
                  
                  ,    cardano-api               -any
                  ,    serialise                 -any
+                 ,    time                      -any
 
     -- Directories containing source files.
     hs-source-dirs:   src
