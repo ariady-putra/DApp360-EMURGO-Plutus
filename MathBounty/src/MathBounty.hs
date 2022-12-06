@@ -115,12 +115,12 @@ data BountyParams = BP
                   } deriving (Generic, FromJSON, ToJSON, Show, ToSchema)
 
 bounty :: BountyParams -> Contract () MathBountySchema Text ()
-bounty (BP bounty amount deadline) = do
-                                   let datum = MBD bounty deadline
-                                       tx = Constraints.mustPayToTheScript datum (Ada.lovelaceValueOf amount)
+bounty (BP b amt dLine) = do
+                                   let datum = MBD b dLine
+                                       tx = Constraints.mustPayToTheScript datum (Ada.lovelaceValueOf amt)
                                    ledgerTx <- submitTxConstraints bountyValidator tx
                                    void $ awaitTxConfirmed $ getCardanoTxId ledgerTx
-                                   logInfo @String $ printf "Some bounty created of amount = %d" (amount)
+                                   logInfo @String $ printf "Some bounty created of amount = %d" amt
 
 solution ::  Integer -> Contract () MathBountySchema Text ()
 solution guess = do
@@ -129,13 +129,13 @@ solution guess = do
                  logInfo @String $ printf "The utxos: %s " (show $ Map.toList unspentOutput )
                  case Map.toList unspentOutput of
                   []             -> logInfo @String $ printf "No UTxOs on the Contract!"
-                  (oref,a):utxos -> do
+                  (oref,a):_     -> do
                                     let lookups = Constraints.unspentOutputs (Map.fromList [(oref,a)]) <>
                                                   Constraints.otherScript validator 
                                     let tx = Constraints.mustSpendScriptOutput oref (Redeemer $ toBuiltinData guess) <> Constraints.mustValidateIn (to now)
                                     ledgerTx <- submitTxConstraintsWith @Void lookups tx
                                     void $ awaitTxConfirmed $ getCardanoTxId ledgerTx
-                                    logInfo @String $ printf "Proposed solution is: %d" (guess)     
+                                    logInfo @String $ printf "Proposed solution is: %d" guess
 
 
 mkSchemaDefinitions ''MathBountySchema
