@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TypeApplications  #-}
 
-module DeployMathBounty
+module Deploy
     ( writeJSON
     , writeValidator
     , writeUnit
@@ -40,8 +40,8 @@ writeUnit = writeJSON "testnet/unit.json" ()
 writeDatum :: IO ()
 writeDatum = writeJSON "testnet/datum.json" (MBD 100 1664586000000)
 
--- writeRedeemer :: IO ()
--- writeRedeemer = writeJSON "testnet/goodRedeemer.json" (10 :: Integer)
+writeRedeemer :: IO ()
+writeRedeemer = writeJSON "testnet/goodRedeemer.json" (10 :: Integer)
 
 writeBountyValidator :: IO (Either (FileError ()) ())
 writeBountyValidator = writeValidator "testnet/mathBounty.plutus" $ validator
