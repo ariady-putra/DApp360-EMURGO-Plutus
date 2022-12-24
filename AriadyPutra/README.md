@@ -40,16 +40,16 @@ It's a game-store just like Steam, but when a user purchase a game they get an N
 ## Actions Outline
 
 1. [At the primary market](#at-the-primary-marketplace)
-  a. [Mint NFTs](#mint-nfts-gamepass-tokens)
-  b. [Update NFT prices](#update-nft-prices)
-  c. [Burn unsold NFTs](#burn-unsold-nfts)
-  d. [Request refund?](#request-refund)
-  e. [Process refund?](#process-refund)
+   1. [Mint NFTs](#mint-nfts-gamepass-tokens)
+   2. [Update NFT prices](#update-nft-prices)
+   3. [Burn unsold NFTs](#burn-unsold-nfts)
+   4. [Request refund?](#request-refund)
+   5. [Process refund?](#process-refund)
 2. [At the secondary market](#at-the-secondary-marketplace)
-  a. [List NFT](#list-nft)
-  b. [Buy NFT](#buy-nft)
-  c. [Update NFT price](#update-nft-price)
-  d. [Cancel NFT listing](#cancel-nft-listing)
+   1. [List NFT](#list-nft)
+   2. [Buy NFT](#buy-nft)
+   3. [Update NFT price](#update-nft-price)
+   4. [Cancel NFT listing](#cancel-nft-listing)
 
 ### At the Primary Marketplace
 
