@@ -33,7 +33,11 @@ It's a game-store just like Steam, but when a user purchase a game they get an N
 
 ### Primary Marketplace
 
+The primary market is very similar to Steam where the game publishers list their games and the users can purchase from them.
+
 ### Secondary Marketplace
+
+The secondary market is a place where the users can sell their game-pass tokens, akin to selling used games.
 
 [back to top](#document-outlines)
 
