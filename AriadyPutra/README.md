@@ -4,19 +4,19 @@ It's a game-store just like Steam, but when a user purchase a game they get an N
 
 ## Document Outlines
 
-1. [Participants](#-participants-outline)
-2. [Marketplaces](#-marketplaces-outline)
-3. [Actions](#-actions-outline)
-4. [Scripts](#-scripts-outline)
-5. [Transactions](#-transaction-outline)
-6. [Logics](#-logic-outline)
-7. [Potential vulnerabilities](#-potential-vulnerabilities)
+1. [Participants](#participants-outline)
+2. [Marketplaces](#marketplaces-outline)
+3. [Actions](#actions-outline)
+4. [Scripts](#scripts-outline)
+5. [Transactions](#transaction-outline)
+6. [Logics](#logic-outline)
+7. [Potential vulnerabilities](#potential-vulnerabilities)
 
 ## Participants Outline
 
-1. [The platform](#-the-platform)
-2. [Game devs / publishers](#-game-devs--publishers)
-3. [Users (customers)](#-users-customers)
+1. [The platform](#the-platform)
+2. [Game devs / publishers](#game-devs--publishers)
+3. [Users (customers)](#users-customers)
 
 ### The Platform
 
@@ -24,32 +24,32 @@ It's a game-store just like Steam, but when a user purchase a game they get an N
 
 ### Users (Customers)
 
-[back to top](#-document-outlines)
+[back to top](#document-outlines)
 
 ## Marketplaces Outline
 
-1. [Primary market](#-primary-marketplace)
-2. [Secondary market](#-secondary-marketplace)
+1. [Primary market](#primary-marketplace)
+2. [Secondary market](#secondary-marketplace)
 
 ### Primary Marketplace
 
 ### Secondary Marketplace
 
-[back to top](#-document-outlines)
+[back to top](#document-outlines)
 
 ## Actions Outline
 
-1. [At the primary market](#-at-the-primary-marketplace)
-  a. [Mint NFTs](#-mint-nfts-gamepass-tokens)
-  b. [Update NFT prices](#-update-nft-prices)
-  c. [Burn unsold NFTs](#-burn-unsold-nfts)
-  d. [Request refund?](#-request-refund)
-  e. [Process refund?](#-process-refund)
-2. [At the secondary market](#-at-the-secondary-marketplace)
-  a. [List NFT](#-list-nft)
-  b. [Buy NFT](#-buy-nft)
-  c. [Update NFT price](#-update-nft-price)
-  d. [Cancel NFT listing](#-cancel-nft-listing)
+1. [At the primary market](#at-the-primary-marketplace)
+  a. [Mint NFTs](#mint-nfts-gamepass-tokens)
+  b. [Update NFT prices](#update-nft-prices)
+  c. [Burn unsold NFTs](#burn-unsold-nfts)
+  d. [Request refund?](#request-refund)
+  e. [Process refund?](#process-refund)
+2. [At the secondary market](#at-the-secondary-marketplace)
+  a. [List NFT](#list-nft)
+  b. [Buy NFT](#buy-nft)
+  c. [Update NFT price](#update-nft-price)
+  d. [Cancel NFT listing](#cancel-nft-listing)
 
 ### At the Primary Marketplace
 
@@ -95,7 +95,7 @@ User
 
 User
 
-[back to top](#-document-outlines)
+[back to top](#document-outlines)
 
 ## Scripts Outline
 
@@ -104,7 +104,7 @@ Sell Script
 ( MadeLoan Script -> Lend Script )
 MadeLoan Script 
 
-[back to top](#-document-outlines)
+[back to top](#document-outlines)
 
 ## Transaction Outline
 
@@ -144,7 +144,7 @@ Out:
 User4 (NFT)
 MadeLoan Script [ ...borrower=User4,  ]
 
-[back to top](#-document-outlines)
+[back to top](#document-outlines)
 
 ## Logic Outline
 
@@ -189,10 +189,10 @@ Redeemer:
 PayBack
 ClawBack
 
-[back to top](#-document-outlines)
+[back to top](#document-outlines)
 
 ## Potential Vulnerabilities
 
 Buy NFT Double Satisfaction (+)
 
-[back to top](#-document-outlines)
+[back to top](#document-outlines)
