@@ -33,11 +33,7 @@ It's a game-store just like Steam, but when a user purchase a game they get an N
 
 ### Primary Marketplace
 
-The main interactions are between game devs / publishers and the users (customers).
-
 ### Secondary Marketplace
-
-The interactions are between users to users.
 
 [back to top](#document-outlines)
 
@@ -57,7 +53,7 @@ The interactions are between users to users.
 
 ### At the Primary Marketplace
 
-The platform gets a percentage cut from each sale and is able to process refunds (TODO: On-chain? Off-chain? Possible?), if any.
+Here, the main interactions are between game devs / publishers and the users (customers). The platform gets a percentage cut from each sale and is able to process refunds (TODO: On-chain? Off-chain? Possible?), if any.
 
 #### Mint NFTs (GamePass Tokens)
 
@@ -81,7 +77,7 @@ The Platform
 
 ### At the Secondary Marketplace
 
-A user lists their game-pass (NFT) and then another user can purchase the token, the game publisher gets a percentage cut from each sale. The platform does not get any percentage cut from the sales at the secondary marketplace, it is created for the community.
+Here, the interactions are between users to users. A user lists their game-pass (NFT) and then another user can purchase the token, the game publisher gets a percentage cut from each sale. The platform does not get any percentage cut from the sales at the secondary marketplace, it is created for the community.
 
 #### List NFT
 
